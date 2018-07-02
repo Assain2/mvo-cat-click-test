@@ -1,0 +1,44 @@
+.container {
+  width: 100%;
+}
+
+.cat-list {
+  width: 100%;
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 1em;
+  grid-auto-rows: minmax(100px, auto);
+  list-style: none;
+}
+
+.cat-list img {
+  display: block;
+  border: 2px solid gray;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+h3 {
+  text-align: center;
+}
+
+p {
+  opacity: 0.1;
+  text-align: center;
+}
+
+.selected img {
+  width: 300px;
+  height: 300px;
+  border: 3px solid pink;
+}
+
+.selected p {
+  opacity: 1;
+  font-size: 1em;
+}
+
+.selected h3 {
+  font-size: 2em;
+}
