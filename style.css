@@ -42,3 +42,7 @@ p {
 .selected h3 {
   font-size: 2em;
 }
+
+.options {
+  visibility: hidden;
+}

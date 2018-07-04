@@ -1,6 +1,7 @@
 /* ======== DATA ======== */
 
 var data = {
+  adminMode: false,
   currentCat: null,
   Cat: function(name, img, id) {
     this.name = name
@@ -33,6 +34,7 @@ var octopus = {
       // Call render function to draw new cat Cards
       view.render(data.catsArr[i].id, data.catsArr[i].img, data.catsArr[i].name, data.catsArr[i].clickTrack);
     }
+    view.renderAdmin();
   },
 
   // Set the clicked cat card to use in other functions
@@ -56,6 +58,58 @@ var octopus = {
     } else if (parent.children().hasClass(newClass)) {
       parent.children().removeClass(newClass);
       element.addClass(newClass);
+    }
+  },
+
+  // Switch admin mode on/off
+  switchAdminMode: function() {
+    if (data.adminMode === false) {
+      data.adminMode = true;
+      $('.options').css('visibility', 'visible');
+    } else {
+      data.adminMode = false;
+      $('.options').css('visibility', 'hidden');
+    }
+  },
+
+  // Update catsArr elements via admin form
+  submitFormInput: function() {
+    var inputName = $('.input-name');
+    var inputImg = $('.input-img');
+    var inputClicks = $('.input-clicks');
+    var selectedCat = $('.selected').attr('id');
+
+    // Alert user if no cat is selected
+    if ($('.cat-list').children().hasClass('selected')) {
+      data.catsArr[selectedCat].name=inputName.val();
+      data.catsArr[selectedCat].img=inputImg.val();
+      data.catsArr[selectedCat].clickTrack=inputClicks.val();
+      inputName.val('');
+      inputImg.val('');
+      inputClicks.val('');
+    } else {
+      alert('please select a cat first');
+    }
+  },
+
+  // Update DOM after adminMode changes
+  adminUpdate: function() {
+    var selectedCatCard = $('.selected').attr('id');
+    var selectedCatObject = data.catsArr[selectedCatCard];
+    if(selectedCatObject.name !== '') {
+      $('.selected').find('h3').text(selectedCatObject.name);
+    } else {
+      alert('please fill the name form');
+    }
+    if(selectedCatObject.img !== '') {
+      $('.selected').find('img').attr('src', selectedCatObject.img);
+    } else {
+      alert('please fill the img url form');
+    }
+    if(selectedCatObject.clickTrack !== '') {
+      $('.selected').find('p').text('Clicks: ' + selectedCatObject.clickTrack );
+    } else {
+      alert('please fill the clicks form');
     }
   },
 
@@ -86,7 +140,7 @@ var view = {
         );
 
       // Add event listeners to each cat card
-      $('#' + id).click(function(){
+      $('#' + id).click(function() {
         var clicked = $(this);
         var theText = 'Clicks: ';
         var clickPar = clicked.find('p');
@@ -95,7 +149,30 @@ var view = {
         octopus.update(clickPar, theText);
       });
   },
+
+  renderAdmin: function() {
+    $('.admin').click(function() {
+      octopus.switchAdminMode();
+    });
+    $('.cancel').click(function() {
+      octopus.switchAdminMode();
+    });
+    $('.save').click(function() {
+      octopus.submitFormInput();
+      octopus.adminUpdate();
+    })
+  }
 };
 
 // Initialize the app
 octopus.init();
+
+// Prevent form submit on 'enter' key
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
