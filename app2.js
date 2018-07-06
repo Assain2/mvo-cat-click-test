@@ -160,6 +160,7 @@ var view = {
     $('.save').click(function() {
       octopus.submitFormInput();
       octopus.adminUpdate();
+      octopus.switchAdminMode();
     })
   }
 };
